@@ -1,61 +1,70 @@
-#include <stdio.h>
-#include <stdlib.h>
-struct Node
-{
- int data;
- struct Node *next;
-}*top=NULL;
-void push(int x)
-{
- struct Node *t;
- t=(struct Node*)malloc(sizeof(struct Node));
 
- if(t==NULL)
- printf("stack is full\n");
- else
- {
- t->data=x;
- t->next=top;
- top=t;
- }
+#include <iostream>
+using namespace std;
 
+class Node{
+    public:
+    int data;
+    Node* next;
+};
+class Stack{
+    private:
+    Node *top;
+    public:
+    Stack(){top=nullptr;}
+    void push(int data);
+    int pop();
+    void display();
+    
+};
+
+void Stack::push(int x)
+{
+    Node *t= new Node;
+    if(t==0){
+        cout<<"Stack is Full";
+    }else{
+    t->data=x;
+    t->next=top;
+    top=t;
+    }
 }
-int pop()
-{
- struct Node *t;
- int x=-1;
 
- if(top==NULL)
- printf("Stack is Empty\n");
- else
- {
- t=top;
- top=top->next;
- x=t->data;
- free(t);
- }
- return x;
+int Stack :: pop(){
+    int x=-1;
+    if(top==0){
+        cout<<"Stack is Empty";
+    }else{
+        Node *t;
+        x=top->data;
+        t=top;
+        top=top->next;
+        delete t;
+    }
+    return x;
 }
-void Display()
-{
- struct Node *p;
- p=top;
- while(p!=NULL)
- {
- printf("%d ",p->data);
- p=p->next;
- }
- printf("\n");
+
+void Stack::display(){
+    Node *p;
+    p=top;
+    if(top==0){
+        cout<<"Nothing to show";
+    }else{
+        while(p){
+            cout<<p->data<<endl;
+            p=p->next;
+        }
+    }
 }
-int main()
-{
- push(10);
- push(20);
- push(30);
+int main() {
+    Stack st;
+    st.push(10);
+    st.push(20);
+    st.push(30);
+    st.push(40);
+    st.display();
+    cout<<st.pop()<<"pop";
+    st.display();
 
- Display();
-
- printf("%d ",pop());
-
- return 0;
+    return 0;
 }
