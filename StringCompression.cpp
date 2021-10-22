@@ -2,7 +2,8 @@
 
 //Code for string compression leetcode
 
-
+#include<bits/stdc++.h>
+using namespace std;
 
 class Solution {
 public:
