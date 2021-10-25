@@ -62,7 +62,7 @@ static bool compare(vector<int> &a,vector<int> &b){
         int flag=0;
         for(int i=0;i<ranges.size();i++){
             if(ranges[i]>0) flag=1;
-            r.push_back({i-ranges[i],i+ranges[i]});
+            r.push_back({max(0,i-ranges[i]),i+ranges[i]});
         }
         sort(r.begin(),r.end(),compare);
         if(flag==0) return -1;
@@ -70,53 +70,57 @@ static bool compare(vector<int> &a,vector<int> &b){
         s.push(r[0]);
         for(int i=1;i<r.size();i++){
             if(r[i][0]==s.top()[0]){
-                if(r[i][1]<=s.top()[1]){
-                    continue;
-                }else{
                    s.pop();
                     s.push(r[i]);
-                }
+                
             }else{
-                if(r[i][0]>s.top()[0]){
-                     if(r[i][0]<=0){
-                       if(r[i][1]>s.top()[1] && s.top()[1]<n){
-                           s.pop();
-                     s.push(r[i]);
-                        continue;
-                    }else if(s.top()[1]>=n){
-                         break;
-                    }  
-                     }
+                if(r[i][0]>s.top()[0] && s.top()[1]<n){
                     if(r[i][1]>s.top()[1] && s.top()[1]<n){
                         auto y=s.top();
-                        while(!s.empty() && r[i][1]> s.top()[1] && s.top()[1]<n && r[i][0]>s.top()[0] &&s.top()[1]>=r[i][0]){     
-                            auto x=s.top();
+                        while(!s.empty() && r[i][1]> s.top()[1] && s.top()[1]<n && r[i][0]>s.top()[0] &&s.top()[1]>=r[i][0])                    {   auto x=s.top();
                             s.pop();
-                                                                                                                                y=x;
+                            y=x;
                         }
                         s.push(y);
-                        s.push(r[i]);
-                        continue;
-                    }else if(s.top()[1]>=n){
-                        break;
-                    }
-                }else if(r[i][0]<s.top()[0]){
-                    if(r[i][1]>=s.top()[1]){
-                        s.pop();
                         s.push(r[i]);
                         continue;
                     }
                 }
                  }}
-        stack<vector<int>> ans=s;
-        auto v=ans.top();
-        ans.pop();
-        if(v[1]<n){return -1;}
-        while(!ans.empty()){
-            if(v[0]>ans.top()[1]) return -1;
-             v=ans.top();
-             ans.pop();       
+        int a=1;
+        auto v=s.top();
+        s.pop();
+        if(v[1]<n) return -1;
+        while(!s.empty()){
+            if(v[0]>s.top()[1]) return -1;
+             v=s.top();
+            a++;
+             s.pop();       
         }
         if(v[0]>0) return -1;
-             return s.size();
+             return a;
+    }
+//Optimal Solution
+
+
+ int minTaps(int n, vector<int>& ranges) {
+               int min = 0;
+        int max = 0;
+        int open = 0;
+        int index = 0;
+        
+        while(max < n){
+            
+            for(int i=index; i<=n; i++){
+                if( i-ranges[i]<=min && i+ranges[i]>max){
+                    max = i+ranges[i];
+                    index = i; 
+                }
+            }
+            if(min==max) return -1;  
+            open++; 
+            min = max;
+        }
+        
+        return open;
     }
